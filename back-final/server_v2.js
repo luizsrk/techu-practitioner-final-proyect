@@ -11,13 +11,14 @@ var apikeyMLab="apiKey=8UTZVy2FCsLnVPizP9tX4tl3HEHWiQvM";
 var queryString='f={"_id":0}&';
 var newID=0;
 var cors = require('cors');
- 
+var ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
 app.use(bodyParser.json());
-app.listen(port);
+app.listen(8080, ip);
 app.use(cors());
-console.log("Escuchando por:"+ port );
+console.log("Escuchando por:"+ ip );
 
+module.exports = app;
 
 //Method GET with params MLab users
 app.get(uri + "users",
