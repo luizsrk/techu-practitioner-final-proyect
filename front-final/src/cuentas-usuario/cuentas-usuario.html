@@ -38,7 +38,7 @@
          <h4 class="col-md-5">Usuario: {{first_name}} {{last_name}}</h2>
          <h4 class="col-md-5">Email: {{email}}</h2>
         <!-- <button class="btn btn-link">
-           <a href="http://localhost:3000/api_peru/v3/users/{{id}}/account">Ver mis cuentas</a>
+           <a href="http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com/api_peru/v3/users/{{id}}/account">Ver mis cuentas</a>
          </button>-->
         <table class="table table-bordered">
         <thead class="thead-dark">
@@ -60,13 +60,13 @@
    <iron-ajax
      auto=""
      id="getUser"
-     url="http://localhost:3000/api_peru/v3/users/{{idr}}"
+     url="http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com/api_peru/v3/users/{{idr}}"
      handle-as="json"
      on-response="showData"></iron-ajax>
     <iron-ajax
        auto=""
        id="getUser1"
-       url="http://localhost:3000/api_peru/v3/users/{{idr}}/account"
+       url="http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com/api_peru/v3/users/{{idr}}/account"
        handle-as="json"
        on-response="showaccount"></iron-ajax>
  </template>

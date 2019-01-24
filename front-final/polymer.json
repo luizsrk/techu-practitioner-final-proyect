@@ -1,7 +1,25 @@
 {
+  "entrypoint": "index.html",
+  "shell": "src/home-padre/home-padre.html",
+  "sources": [
+    "src/**/*",
+    "img/**/*",
+    "bower.json"
+   ],
+
+   "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/webcomponents-lite.js"
+  ],
+  
   "lint": {
     "rules": [
       "polymer-2"
     ]
-  }
+  },
+  "builds": [
+    { "preset": "es5-bundled" },
+    { "preset": "es6-bundled" },
+    { "preset": "es6-unbundled" }
+  ]
 }
