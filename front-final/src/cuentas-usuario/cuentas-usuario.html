@@ -1,0 +1,148 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="cuentas-usuario">
+ <template>
+   <style>
+     :host {
+       display: block;
+       font-family: Helvetica;
+     }
+     .container{
+       width: 100%;
+       max-width: 600px;
+       margin: 0 auto;
+       padding: 100px 0;
+       padding-top: 10px;
+     }
+     .container h4{
+       font-family: Helvetica;
+       color: white;
+     }
+     .container .table .thead-dark th{
+       background:  #0672ca !important
+     }
+     .container .table-bordered th{
+       background: white
+     }
+     .container .table-bordered td{
+       background: white
+     }
+   </style>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+     <!-- Bootstrap permite indicar el ancho por nº columnas (col-md-5 indica 5 columnas)
+     total columnas 12 (que indica el ancho máximo)-->
+     <!-- media query -->
+
+     <div hidden$="{{isvar2}}" class="container">
+         <h4 class="col-md-5">Usuario: {{first_name}} {{last_name}}</h2>
+         <h4 class="col-md-5">Email: {{email}}</h2>
+        <!-- <button class="btn btn-link">
+           <a href="http://localhost:3000/api_peru/v3/users/{{id}}/account">Ver mis cuentas</a>
+         </button>-->
+        <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Nro Cuenta</th>
+            <th scope="col">Saldo </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <template is="dom-repeat" id="accountUser" items="{{account}}">
+            <tr>
+                <th scope="row">{{item.nroCuenta}}</th>
+                <td>{{item.saldoContable}}</td>
+                <td><button  class="btn btn-primary" on-click="panelmovimientos">Ver Movimientos</button></td>
+          </tr>
+        </template>
+       </table>
+   </div>
+   <iron-ajax
+     auto=""
+     id="getUser"
+     url="http://localhost:3000/api_peru/v3/users/{{idr}}"
+     handle-as="json"
+     on-response="showData"></iron-ajax>
+    <iron-ajax
+       auto=""
+       id="getUser1"
+       url="http://localhost:3000/api_peru/v3/users/{{idr}}/account"
+       handle-as="json"
+       on-response="showaccount"></iron-ajax>
+ </template>
+
+
+ <script>
+   /**
+    * @customElement
+    * @polymer
+    */
+   class CuentasUsuario extends Polymer.Element {
+     static get is() { return 'cuentas-usuario'; }
+     static get properties() {
+       return {
+         idcue:{
+           type:String
+         },
+         first_name: {
+           type: String
+         },
+         last_name: {
+           type: String
+         },
+         email: {
+           type: String
+         },
+         account: {
+           type: Array
+         },
+         idr:{
+           type:String
+         },
+         isvar2:{
+           type:Boolean,
+           value:true
+         },isvar5:{
+           type:Boolean
+         }
+       };
+     }
+     showData(data){
+        //console.log(data);
+        console.log("Recibidos datos del usuarios cuentas:");
+  // mLab nos devuelve un array con el objeto solicitado por eso [0]
+      //  console.log(data.detail.response.id);
+      console.log(data.detail.response);
+
+        this.idr = data.detail.response.userID;
+        this.first_name = data.detail.response.first_name;
+        this.last_name = data.detail.response.last_name;
+        this.email = data.detail.response.email;
+      }
+      showaccount(data){
+         //console.log(data);
+         console.log("Recibidos datos del usuarios en cuentas:");
+   // mLab nos devuelve un array con el objeto solicitado por eso [0]
+         console.log(data.detail.response);
+         this.idcue = data.detail.response.idCuenta;
+         this.account = data.detail.response;
+       }
+       panelmovimientos(e){
+         console.log("pulsa boton movimientos: ");
+         this.isvar5=false;
+         this.isvar2=true;
+         this.dispatchEvent(new CustomEvent('panelmovimientos', {detail:{email:this.email,idr:this.idr,idcue:this.idcue,isvar5:this.isvar5}}))
+         console.log(this.email);
+         console.log(this.idcue);
+         console.log(this.isvar5);
+
+       }
+       mostrarDatosRecibidoscuentas(data){
+         console.log("Receptor Cuentas:"+JSON.stringify(data))
+        this.idr=data.idusu;
+        this.isvar2=data.isvar2;
+       }
+   }
+   window.customElements.define(CuentasUsuario.is, CuentasUsuario);
+ </script>
+</dom-module>

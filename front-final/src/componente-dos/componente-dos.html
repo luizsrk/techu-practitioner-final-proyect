@@ -1,0 +1,39 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="componente-dos">
+ <template>
+   <style>
+     :host {
+       display: block;
+       color: green;
+     }
+   </style>
+   <h2>Hello [[name]]!</h2>
+   <h2>y tengo [[age]]</h2>
+   <input type="text" value={{name::input}} />
+   <input type="range" min="18" max="120" value={{age::input}} />
+
+ </template>
+
+ <script>
+   /**
+    * @customElement
+    * @polymer
+    */
+   class ComponenteDos extends Polymer.Element {
+     static get is() { return 'componente-dos'; }
+     static get properties() {
+       return {
+         name: {
+           type: String
+         },
+         age: {
+           type: Number
+         }
+       };
+     }
+   }
+
+   window.customElements.define(ComponenteDos.is, ComponenteDos);
+ </script>
+</dom-module>

@@ -1,0 +1,7 @@
+{
+  "name": "api_peru_front",
+  "short_name": "api_peru_front",
+  "description": "first the component front api_peru",
+  "start_url": "/",
+  "display": "standalone"
+}

@@ -1,0 +1,213 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/simple-dropdown/simple-dropdown.html">
+<link rel="import" href="/bower_components/app-router/app-router.html"></script>
+
+<dom-module id="home-usuario">
+ <template>
+   <style>
+     :host {
+       display: block;
+       font-family: Helvetica;
+     }
+     .container{
+       width: 100%;
+       max-width: 600px;
+       margin: 0 auto;
+       padding: 100px 0;
+       top:100px;
+       padding-bottom: 10px;
+     }
+     .container h1{
+       color: white;
+     }
+     .container .navbar-dark   {
+       color: white;
+    }
+    .container .bg-primary {
+      background: #0672ca !important;
+    }
+    simple-dropdown a {
+     background: #0672ca !important;
+     text-decoration: none;
+     color: inherit;
+     display: inline-block;
+     text-decoration: none;
+     padding: 0.5em 1em;
+   }
+   .container .btn-outline-success{
+     color: white;
+     border-color:#0b8585
+   }
+   .container .btn-outline-success:hover {
+    background-color: #0b8585
+  }
+    simple-dropdown .a1 {
+      padding-right:27.70px;
+    }
+    simple-dropdown .a2{
+      padding-right: 19.70px;
+    }
+    simple-dropdown .a3{
+      padding-right: 26.80px;
+    }
+   </style>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+   <div hidden$="{{ishome}}"class="container">
+     <h1 class="h1">Bienvenido  {{first_name}}  {{last_name}} </h1>
+      <nav class="navbar navbar-expand-lg  navbar navbar-dark bg-primary">          
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-link">
+                    <button class="btn btn-outline-success my-2 my-sm-0" on-click="panelcuentas">Resumen de Productos</button>
+                  </li>  
+                <li class="nav-link">
+                  <button hidden$="{{!isadmin}}" class="btn btn-outline-success my-2 my-sm-0" on-click="panelusuarios">Adminsitracion de Usuarios</button>
+                </li>               
+            </ul>
+          </div>
+          <button class="btn btn-outline-success my-2 my-sm-0" on-click="logout">Logout</button>
+      </nav>
+    </div>
+
+          <iron-ajax
+          id="dologout"
+          url="http://localhost:3000/api_peru/v3/logout"
+          content-type="application/json"
+          method="POST"
+          handle-as="json"
+          on-response="manageAJAXResponse"
+          on-error="showError">
+  </template>
+
+
+ <script>
+   /**
+    * @customElement
+    * @polymer
+    */
+   class HomeUsuario extends Polymer.Element {
+     static get is() { return 'home-usuario'; }
+     static get properties() {
+       return {
+         idusu: {
+           type: String,
+         },
+         first_name: {
+           type: String
+         },
+         last_name: {
+           type: String
+         },
+         email: {
+           type: String
+         },
+         account: {
+           type: Array
+         },
+         ishome: {
+           type: Boolean,
+           value: true
+         },
+         isLogged: {
+           type: Boolean,
+           value: true
+         },
+         first_name: {
+           type: String
+         },
+         last_name: {
+           type: String
+         },
+         isvar1:{
+           type:Boolean
+         },
+         isvar2:{
+           type:Boolean
+         },
+         isadmin:{
+           type:Boolean,
+           value:false
+         },
+         isvar5:{
+           type:Boolean
+         }
+       };
+
+     }
+    logout() {
+       console.log("El usuario ha pulsado el botón logout.");
+       var logoutData = {
+         "email" : this.email
+       };
+       this.$.dologout.body = JSON.stringify(logoutData);
+       this.$.dologout.generateRequest();
+     }
+     panelusuarios() {
+       console.log("pulsa boton usuarios");
+       this.isvar1=false;
+       this.isvar2=true;
+       this.isvar5=true;
+       this.dispatchEvent(new CustomEvent('panelusuarios', {detail:{email:this.email,isvar1:this.isvar1,isvar2:this.isvar2,isvar5:this.isvar5}}))
+       console.log(this.email);
+       console.log(this.isvar1);
+    }
+    panelcuentas() {
+      console.log("pulsa boton cuentas");
+      this.isvar2=false;
+      this.isvar1=true;
+      this.isvar5=true;
+      this.isvar3=true;
+      this.isvar4=true;
+      this.isvar7=true;
+      this.isvar6=true;
+      this.dispatchEvent(new CustomEvent('panelcuentas', {detail:{email:this.email,idusu:this.idusu,isvar1:this.isvar2,isvar1:this.isvar1,isvar5:this.isvar5,isvar3:this.isvar3,isvar4:this.isvar4,isvar7:this.isvar7,isvar6:this.isvar6}}))
+      console.log(this.email);
+      console.log(this.isvar1);
+      console.log(this.idusu);
+   }
+    mostrarDatosRecibidos(data){
+       console.log("Receptor home:"+JSON.stringify(data));
+       console.log(data.isLogged);
+       console.log(data.ishome);
+       console.log(data.idusu);
+       console.log(data.isadmin);
+       this.email = data.email;
+       this.ishome= data.ishome;
+       this.first_name= data.first_name;
+       this.last_name= data.last_name;
+       this.isLogged=data.isLogged;
+       this.idusu=data.idusu;
+       this.isadmin=data.isadmin;
+       this.panelcuentas();    
+     }
+     manageAJAXResponse(data) {
+       console.log("Recibida respuesta del servidor");
+       console.log(data.detail.response.email);
+       this.isLogged=false;
+       this.ishome=true;
+       this.isvar1=true;
+       this.isvar2=true;
+       this.isvar5=true;
+       this.isvar3=true;
+       this.isvar4=true;
+       this.isvar6=true;
+       this.isvar7=true;
+       this.isvar8=true;
+       this.dispatchEvent(new CustomEvent('logoutOK', {detail:{email:this.email,first_name:this.first_name,last_name:this.last_name,isLogged:this.isLogged,ishome:this.ishome,isvar3:this.isvar3,isvar1:this.isvar1,isvar2:this.isvar2,isvar4:this.isvar4,isvar5:this.isvar5,isvar7:this.isvar7,isvar6:this.isvar6,isvar8:this.isvar8}}))
+       console.log("isLoggedhome:" + this.isLogged);
+       console.log("ishomehome:" + this.ishome);
+
+     }
+     showError(error) {
+       console.log("Hubo un error");
+       console.log(error);
+     }
+   }
+   window.customElements.define(HomeUsuario.is, HomeUsuario);
+ </script>
+</dom-module>

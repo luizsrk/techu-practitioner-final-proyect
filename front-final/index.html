@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>api_peru_front</title>
+    <meta name="description" content="first the component front api_peru">
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json">
+
+    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <link rel="import" href="/src/home-usuario/home-usuario.html">
+    <link rel="import" href="/src/consultas-usuario/consultas-usuario.html">
+    <link rel="import" href="/src/home-padre/home-padre.html">
+    <link rel="import" href="/src/cuentas-usuario/cuentas-usuario.html">
+    <link rel="import" href="/src/modificar-usuario/modificar-usuario.html">
+    <link rel="import" href="/src/agregar-usuario/agregar-usuario.html">
+    <link rel="import" href="/src/eliminar-usuario/eliminar-usuario.html">
+    <link rel="import" href="/src/movimientos-usuario/movimientos-usuario.html">
+
+
+    <style type="text/css">
+      body{
+       background: #072146;
+       background-image: url("../../img/BBVA_images.png");
+       background-repeat: round;
+     }
+      .div-img{
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+   <home-padre></home-padre>
+   <!--<agregar-usuario></agregar-usuario>
+   <modificar-usuario></modificar-usuario>
+   <eliminar-usuario></eliminar-usuario>
+   <consultas-usuario></consultas-usuario>-->
+    <div class="div-img">
+      <footer>
+        <!-- <div class='define'>
+            <img src="../../img/bbvacreando.jpg" class="center-block" alt="Responsive image">
+        </div> -->
+      </footer>
+    </div>
+  </body>
+</html>

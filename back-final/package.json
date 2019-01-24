@@ -1,0 +1,30 @@
+{
+  "name": "api_peru",
+  "version": "1.0.0",
+  "description": "API TechU Peru 1Ed",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha --exit --timeout 10000",
+    "start": "nodemon server_v2.js"
+  },
+  "keywords": [
+    "API",
+    "TechU",
+    "Peru",
+    "Practitioner",
+    "BBVA"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.3",
+    "nodemon": "^1.17.5",
+    "request-json": "^0.6.3"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "mocha": "^5.2.0"
+  }
+}

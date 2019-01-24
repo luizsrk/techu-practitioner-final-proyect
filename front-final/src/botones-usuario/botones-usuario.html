@@ -1,0 +1,118 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="botones-usuario">
+ <template>
+   <style>
+     :host {
+       display: block;
+       font-family: Helvetica;
+     }
+     .container{
+       width: 100%;
+       max-width: 600px;
+       margin: 0 auto;
+       padding: 100px 0;
+       padding-top: 10px;
+     }
+     .container .btn-outline-success{
+       background: white;
+       color: black;
+       border-color:#0b8585
+     }
+     .container .btn-outline-success:hover {
+      background-color: #0b8585
+     }
+     .container{   padding-bottom: 30px;}
+   </style>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+     <!-- Bootstrap permite indicar el ancho por nº columnas (col-md-5 indica 5 columnas)
+     total columnas 12 (que indica el ancho máximo)-->
+     <!-- media query -->
+
+     <div hidden$="{{isvar1}}" class="container">
+       <button class="btn btn-outline-success my-2 my-sm-0" on-click="panelagregar">agregar</button>
+       <button class="btn btn-outline-success my-2 my-sm-0" on-click="panelmodificar">modificar</button>
+       <button class="btn btn-outline-success my-2 my-sm-0" on-click="paneleliminar">eliminar</button>
+       <button class="btn btn-outline-success my-2 my-sm-0" on-click="panelconsultar">consultar</button>
+     </div>
+
+
+ </template>
+
+
+ <script>
+   /**
+    * @customElement
+    * @polymer
+    */
+   class BotonesUsuario extends Polymer.Element {
+     static get is() { return 'botones-usuario'; }
+     static get properties() {
+       return {
+         isvar1:{
+           type: Boolean,
+           value: true
+         },email:{
+           type:String
+         }
+       };
+     }
+     mostrarDatosRecibidosusuarios(data){
+       console.log(" Boton Receptor:"+JSON.stringify(data));
+       console.log(data.email);
+       console.log(data.isvar1);
+       this.email = data.email;
+       this.isvar1=data.isvar1;
+     }
+     panelagregar() {
+       console.log("pulsa boton agregar");
+       this.isvar2=true;
+       this.isvar5=true;
+       this.isvar4=true;
+       this.isvar7=true;
+       this.isvar6=true;
+       this.isvar9=true;
+       this.isvar3=false;
+       this.dispatchEvent(new CustomEvent('panelagregar', {detail:{email:this.email,idusu:this.idusu,isvar1:this.isvar2,isvar5:this.isvar5,isvar3:this.isvar3,isvar4:this.isvar4,isvar6:this.isvar6,isvar7:this.isvar7,isvar6:this.isvar6,isvar9:this.isvar9}}))
+    }
+    panelmodificar() {
+      console.log("pulsa boton modificar");
+      this.isvar2=true;
+      this.isvar5=true;
+      this.isvar3=true;
+      this.isvar6=true;
+      this.isvar7=true;
+      this.isvar10=true;
+      this.isvar4=false;
+      this.dispatchEvent(new CustomEvent('panelmodificar', {detail:{email:this.email,idusu:this.idusu,isvar1:this.isvar2,isvar5:this.isvar5,isvar3:this.isvar3,isvar4:this.isvar4,isvar6:this.isvar6,isvar7:this.isvar7,isvar10:this.isvar10}}))
+   }
+   paneleliminar() {
+     console.log("pulsa boton eliminar");
+     this.isvar2=true;
+     this.isvar5=true;
+     this.isvar3=true;
+     this.isvar4=true;
+     this.isvar7=true;
+     this.isvar11=true;
+     this.isvar6=false;
+     this.dispatchEvent(new CustomEvent('paneleliminar', {detail:{email:this.email,idusu:this.idusu,isvar1:this.isvar2,isvar5:this.isvar5,isvar3:this.isvar3,isvar4:this.isvar4,isvar6:this.isvar6,isvar7:this.isvar7,isvar11:this.isvar11}}))
+     console.log(this.email);
+     console.log(this.isvar1);
+  }
+  panelconsultar() {
+    console.log("pulsa boton consultas");
+    this.isvar2=true;
+    this.isvar5=true;
+    this.isvar3=true;
+    this.isvar4=true;
+    this.isvar6=true;
+    this.isvar7=false;
+    this.dispatchEvent(new CustomEvent('panelconsultar', {detail:{email:this.email,idusu:this.idusu,isvar1:this.isvar2,isvar5:this.isvar5,isvar3:this.isvar3,isvar4:this.isvar4,isvar6:this.isvar6,isvar7:this.isvar7}}))
+    console.log(this.email);
+    console.log(this.isvar1);
+ }
+   }
+   window.customElements.define(BotonesUsuario.is, BotonesUsuario);
+ </script>
+</dom-module>

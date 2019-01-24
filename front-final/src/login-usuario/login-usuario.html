@@ -1,0 +1,153 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="login-usuario">
+ <!-- Plantilla del componente -->
+ <template>
+   <style>
+     :host {
+       display: block;
+       font-family: Helvetica;
+     }
+     .container{
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 100px 0;
+      top:100px;
+     }
+     .col-md-12{
+      font-family: Helvetica;
+      color: white;
+      }
+     .btn-primary{
+       background: #0b8585!important;
+     }
+   </style>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+     <!-- Bootstrap permite indicar el ancho por nº columnas (col-md-5 indica 5 columnas)
+     total columnas 12 (que indica el ancho máximo)-->
+     <!-- media query -->
+     <div hidden$="{{isLogged}}" class="container">
+       <h1 class="col-md-12" style="text-align:center" >Banca por Internet</h1>
+       <br />
+         <div class="card" style="width: 30rem; margin:auto;" alt="Responsive card">
+           <div class="card-body">
+             <div class="form-group">               
+               <input type="email" class="form-control" id="exampleInputEmail1" on-click="myFunction" placeholder="Usuario" value="{{email::input}}">
+             </div>
+             <div class="form-group">               
+               <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Contraseña de Banca por Internet" value="{{password::input}}">
+             </div>
+             <button  class="btn btn-success" on-click="login">Entrar</button><br></br>
+             <div hidden$="{{isvar8}}" class="alert alert-danger">
+              <strong>Email o Password incorrecto!</strong>
+            </div>
+           </div>
+        </div>
+     </div>
+   <iron-ajax
+     id="doLogin"
+     url="http://localhost:3000/api_peru/v3/login"
+     content-type="application/json"
+     method="POST"
+     handle-as="json"
+     on-response="manageAJAXResponse"
+     on-error="showError">
+ </template>
+
+ <script>
+   /**
+    * @customElement
+    * @polymer
+    */
+   class LoginUsuario extends Polymer.Element {
+     static get is() { return 'login-usuario'; }
+     static get properties() {
+       return {
+         email: {
+           type: String
+         }, password: {
+           type: String
+         }, isLogged: {
+           type: Boolean,
+           value: false
+         },
+         ishome:{
+           type:Boolean,
+           value:false
+         },
+         first_name: {
+           type: String
+         },
+         last_name: {
+           type: String
+         },
+         idusu:{
+           type: String
+         },
+         isadmin:{
+           type:Boolean,
+           value:false
+         },
+         isvar8:{
+           type:Boolean,
+           value:true
+         }
+       };
+     }
+
+     login(e) {
+       console.log("El usuario ha pulsado el botón login");
+       var loginData = {
+         "email" : this.email,
+         "password" : this.password
+       };
+       this.$.doLogin.body = JSON.stringify(loginData);
+       this.$.doLogin.generateRequest();
+     }
+     myFunction(){
+       this.isvar8=true;
+     }
+    mostrarDatosRecibidos(data){
+        console.log("Receptor:"+JSON.stringify(data));
+        console.log(data.isLogged);
+        console.log(data.ishome);
+        this.ishome= data.ishome;
+        this.isLogged=data.isLogged;
+        this.isvar8=data.isvar8;
+        this.isadmin=data.isadmin;
+      }
+     manageAJAXResponse(data) {
+       console.log("Recibida respuesta del servidor");
+       console.log(data.detail.response.userID);
+       console.log(data.detail.response.email);
+       console.log(data.detail.response.password);
+       console.log(data.detail.response.isAdmin);
+       this.first_name = data.detail.response.first_name;
+       this.last_name =data.detail.response.last_name;
+       this.idusu=data.detail.response.userID;
+       this.isadmin=data.detail.response.isAdmin;
+       if (data.detail.response.email!=undefined || data.detail.response.password!=undefined ) {
+         this.isLogged=true;
+         this.ishome=false;
+       } else {
+         this.isLogged=false;
+         this.ishome=true;
+         this.isvar8=false;
+       }
+       this.dispatchEvent(new CustomEvent('loginOK', {detail:{isadmin:this.isadmin,email:this.email,first_name:this.first_name,last_name:this.last_name,isLogged:this.isLogged,ishome:this.ishome,idusu:this.idusu}}))
+       console.log("isLoggeddellogin:" + this.isLogged);
+       console.log("ishomedellogin:" + this.ishome);
+       console.log("idusu:" +this.idusu);
+       console.log("idusu:" +this.isadmin);
+     }
+     showError(error) {
+       console.log("Hubo un error");
+       console.log(error);
+     }
+
+   }
+   window.customElements.define(LoginUsuario.is, LoginUsuario);
+ </script>
+</dom-module>

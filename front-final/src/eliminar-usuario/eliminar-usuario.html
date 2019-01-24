@@ -1,0 +1,120 @@
+eliminar<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="eliminar-usuario">
+ <template>
+   <style>
+     :host {
+       display: block;
+       font-family: Helvetica;
+     }
+     .container{
+       width: 100%;
+       max-width: 600px;
+       margin: 0 auto;
+       padding: 100px 0;
+       padding-top: 10px;
+     }
+     .container .btn-outline-success{
+       background: white;
+       color: black;
+       border-color:#0b8585
+     }
+     .container .btn-outline-success:hover {
+      background-color: #0b8585
+     }
+     .btn-primary{
+       background: #0b8585!important;
+     }
+     .container h3{color: white}
+   </style>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+     <!-- Bootstrap permite indicar el ancho por nº columnas (col-md-5 indica 5 columnas)
+     total columnas 12 (que indica el ancho máximo)-->
+     <!-- media query -->
+
+     <div hidden$="{{isvar6}}" class="container">
+       <h3>Eliminar Usuario</h3>
+       <input type="id" class="form-control" id="idusuario"  placeholder="Id user to delete" value="{{ideli::input}}"></br>
+       <button  class="btn btn-primary" on-click="eliminar">eliminar</button>
+       <br></br>
+       <div hidden$="{{isvar11}}" class="alert alert-success">
+         <strong>Usuario eliminado!</strong>
+       </div>
+     </div>
+
+     <iron-ajax
+       id="doeliminar"
+       url="http://localhost:3000/api_peru/v3/users/{{ideli}}"
+       content-type="application/json"
+       method="DELETE"
+       handle-as="json"
+       on-response="manageAJAXResponse"
+       on-error="showError">
+
+ </template>
+
+
+ <script>
+   /**
+    * @customElement
+    * @polymer
+    */
+   class EliminarUsuario extends Polymer.Element {
+     static get is() { return 'eliminar-usuario'; }
+     static get properties() {
+       return {
+         isvar6:{
+           type: Boolean,
+           value: true
+         },email: {
+           type: String
+         }, password: {
+           type: String
+         },
+         first_name: {
+           type: String
+         },
+         last_name: {
+           type: String
+         },
+         ideli: {String},
+         isvar11:{
+           type: Boolean,
+           value: true
+         }
+       };
+     }
+     eliminar(e) {
+       console.log("El usuario ha pulsado el botón eliminar");
+       var eliminarData = {
+         "id" : this.id
+       };
+       this.$.doeliminar.body = JSON.stringify(eliminarData);
+       this.$.doeliminar.generateRequest();
+     }
+     mostrarDatosRecibidosEliminar(data){
+        console.log("Receptor eliminar:"+JSON.stringify(data));
+       this.isvar6=data.isvar6;
+       this.isvar11=data.isvar11;
+      }
+     manageAJAXResponse(data) {
+       console.log("Recibida respuesta del servidor para eliminar usuario");
+       console.log(data.detail.response);
+
+       this.first_name = data.detail.response.first_name;
+       this.last_name =data.detail.response.last_name;
+       this.ideli=data.detail.response.id;
+       this.email = data.detail.response.email;
+       this.password = data.detail.response.password;
+       this.isvar11=false;
+
+     }
+     showError(error) {
+       console.log("Hubo un error");
+       console.log(error);
+     }
+   }
+   window.customElements.define(EliminarUsuario.is, EliminarUsuario);
+ </script>
+</dom-module>

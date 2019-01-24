@@ -1,0 +1,136 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/src/login-usuario/login-usuario.html">
+<link rel="import" href="/src/home-usuario/home-usuario.html">
+<link rel="import" href="/src/botones-usuario/botones-usuario.html">
+<link rel="import" href="/src/cuentas-usuario/cuentas-usuario.html">
+<link rel="import" href="/src/movimientos-usuario/movimientos-usuario.html">
+<link rel="import" href="/src/agregar-usuario/agregar-usuario.html">
+<link rel="import" href="/src/modificar-usuario/modificar-usuario.html">
+<link rel="import" href="/src/eliminar-usuario/eliminar-usuario.html">
+<link rel="import" href="/src/consultas-usuario/consultas-usuario.html">
+
+
+<dom-module id="home-padre">
+ <!-- Plantilla del componente -->
+ <template>
+   
+         <login-usuario id="Emisor"></login-usuario>
+         <home-usuario id="Receptor"></home-usuario>  
+         <botones-usuario id="Receptorusu"></botones-usuario>         
+         <cuentas-usuario id="Receptorcuen"></cuentas-usuario>
+         <movimientos-usuario id="Receptormov"></movimientos-usuario>
+         <agregar-usuario id="Receptoragregar"></agregar-usuario>
+         <modificar-usuario id="Receptormodificar"></modificar-usuario>
+         <eliminar-usuario id="Receptoreliminar"></eliminar-usuario>
+        <consultas-usuario id="Receptorconsultar"></consultas-usuario>
+  </template>
+
+ <script>
+   /**
+    * @customElement
+    * @polymer
+    */
+   class HomePadre extends Polymer.Element {
+     static get is() { return 'home-padre'; }
+     
+     ready(){
+      
+       super.ready()
+       
+       this.$.Emisor.addEventListener('loginOK', e => {this.procesarLogin(e)})      
+       this.$.Receptor.addEventListener('logoutOK', e => {this.procesarLogout(e)})       
+       this.$.Receptor.addEventListener('panelusuarios', e => {this.procesarUsuarios(e)})
+       
+       this.$.Receptor.addEventListener('panelcuentas', e => {this.procesarCuentas(e)})
+       
+       this.$.Receptorcuen.addEventListener('panelmovimientos', e => {this.procesarmovimientos(e)})
+       this.$.Receptorusu.addEventListener('panelagregar', e => {this.procesarAgregar(e)})       
+       this.$.Receptorusu.addEventListener('panelmodificar', e => {this.procesarModificar(e)})      
+       this.$.Receptorusu.addEventListener('paneleliminar', e => {this.procesarEliminar(e)})
+       this.$.Receptorusu.addEventListener('panelconsultar', e => {this.procesarConsultar(e)})
+       
+     }
+     static get properties() {
+       return {
+       };
+     }
+     
+     procesarLogout(e){
+       
+       console.log("Padre Soy logoutOK:"+ e.detail);
+       this.$.Emisor.mostrarDatosRecibidos(e.detail)
+       this.$.Receptorusu.mostrarDatosRecibidosusuarios(e.detail)
+       this.$.Receptorcuen.mostrarDatosRecibidoscuentas(e.detail)
+       //this.$.Receptormov.mostrarDatosRecibidosmovimientos(e.detail)
+       this.$.Receptoragregar.mostrarDatosRecibidosAgregar(e.detail)
+       this.$.Receptormodificar.mostrarDatosRecibidosModificar(e.detail)
+       this.$.Receptoreliminar.mostrarDatosRecibidosEliminar(e.detail)
+       this.$.Receptorconsultar.mostrarDatosRecibidosconsultas(e.detail)
+      }
+     
+     procesarUsuarios(e){
+       console.log("Padre Soy usuarios:"+ e.detail);
+       this.$.Receptorusu.mostrarDatosRecibidosusuarios(e.detail)
+       this.$.Receptorcuen.mostrarDatosRecibidoscuentas(e.detail)
+       this.$.Receptormov.mostrarDatosRecibidosmovimientos(e.detail)
+     }
+     
+     procesarCuentas(e){
+       console.log("Padre Soy cuentas:"+ e.detail);
+       this.$.Receptorcuen.mostrarDatosRecibidoscuentas(e.detail)
+       this.$.Receptorusu.mostrarDatosRecibidosusuarios(e.detail)
+       this.$.Receptormov.mostrarDatosRecibidosmovimientos(e.detail)
+       this.$.Receptoragregar.mostrarDatosRecibidosAgregar(e.detail)
+       this.$.Receptormodificar.mostrarDatosRecibidosModificar(e.detail)
+       this.$.Receptoreliminar.mostrarDatosRecibidosEliminar(e.detail)
+       this.$.Receptorconsultar.mostrarDatosRecibidosconsultas(e.detail)
+     }
+     
+     procesarmovimientos(e){
+       console.log("Padre Soy movimientos:"+ e.detail);
+       this.$.Receptormov.mostrarDatosRecibidosmovimientos(e.detail)
+     }
+     
+     procesarAgregar(e){
+       console.log("Padre Soy agregar:"+ e.detail);
+       this.$.Receptoragregar.mostrarDatosRecibidosAgregar(e.detail)
+       this.$.Receptormodificar.mostrarDatosRecibidosModificar(e.detail)
+       this.$.Receptoreliminar.mostrarDatosRecibidosEliminar(e.detail)
+       this.$.Receptorconsultar.mostrarDatosRecibidosconsultas(e.detail)
+     }
+     
+     procesarModificar(e){
+       console.log("Padre Soy modificar:"+ e.detail);
+       this.$.Receptoragregar.mostrarDatosRecibidosAgregar(e.detail)
+       this.$.Receptormodificar.mostrarDatosRecibidosModificar(e.detail)
+       this.$.Receptoreliminar.mostrarDatosRecibidosEliminar(e.detail)
+      this.$.Receptorconsultar.mostrarDatosRecibidosconsultas(e.detail)
+     }
+     
+     procesarEliminar(e){
+       console.log("Padre Soy eliminar:"+ e.detail);
+       this.$.Receptoragregar.mostrarDatosRecibidosAgregar(e.detail)
+       this.$.Receptormodificar.mostrarDatosRecibidosModificar(e.detail)
+       this.$.Receptoreliminar.mostrarDatosRecibidosEliminar(e.detail)
+       this.$.Receptorconsultar.mostrarDatosRecibidosconsultas(e.detail)
+     }
+      
+     procesarConsultar(e){
+       console.log("Padre Soy consultas:"+ e.detail);
+       this.$.Receptoragregar.mostrarDatosRecibidosAgregar(e.detail)
+       this.$.Receptormodificar.mostrarDatosRecibidosModificar(e.detail)
+       this.$.Receptoreliminar.mostrarDatosRecibidosEliminar(e.detail)
+       this.$.Receptorconsultar.mostrarDatosRecibidosconsultas(e.detail)
+     }
+     
+     procesarLogin(e){
+       console.log("Padre Soy loginOK:"+ e.detail);
+       this.$.Receptor.mostrarDatosRecibidos(e.detail)
+     }
+    
+   }
+  
+   window.customElements.define(HomePadre.is, HomePadre);
+ </script>
+</dom-module>

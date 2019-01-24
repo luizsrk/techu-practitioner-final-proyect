@@ -1,0 +1,138 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="agregar-usuario">
+ <template>
+   <style>
+     :host {
+       display: block;
+       font-family: Helvetica;
+     }
+     .container{
+       width: 100%;
+       max-width: 600px;
+       margin: 0 auto;
+       padding: 100px 0;
+       padding-top: 10px;
+     }
+     .container .btn-outline-success{
+       background: white;
+       color: black;
+       border-color:#0b8585
+     }
+     .container .btn-outline-success:hover {
+      background-color: #0b8585
+     }
+     .btn-primary{
+       background: #0b8585!important;
+     }
+     .container h3{color: white}
+   </style>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+     <!-- Bootstrap permite indicar el ancho por nº columnas (col-md-5 indica 5 columnas)
+     total columnas 12 (que indica el ancho máximo)-->
+     <!-- media query -->
+
+     <div hidden$="{{isvar3}}" class="container">
+       <h3>Agregar Usuario</h3>
+       <input type="first_name" class="form-control" id="first_name"  placeholder="Enter first_name" value="{{first_name::input}}"></br>
+       <input type="last_name" class="form-control" id="last_name"  placeholder="Enter last_name" value="{{last_name::input}}"></br>
+       <input type="email" class="form-control" id="exampleInputEmail1"  placeholder="Enter email" value="{{email::input}}"></br>
+       <input type="ip_address" class="form-control" id="ip_address"  placeholder="Enter ip_address" value="{{ip_address::input}}"></br>
+       <input type="gender" class="form-control" id="gender"  placeholder="Enter gender" value="{{gender::input}}"></br>
+       <input type="password" class="form-control" id="password" placeholder="Enter password" value="{{password::input}}"></br>
+       <button  class="btn btn-primary" on-click="agregar">agregar</button><br></br>
+       <div hidden$="{{isvar9}}"class="alert alert-success">
+        <strong>Usuario agregado!</strong>
+      </div>
+     </div>
+
+     <iron-ajax
+       id="doagregar"
+       url="http://localhost:3000/api_peru/v3/users"
+       content-type="application/json"
+       method="POST"
+       handle-as="json"
+       on-response="manageAJAXResponse"
+       on-error="showError">
+
+ </template>
+
+
+ <script>
+   /**
+    * @customElement
+    * @polymer
+    */
+   class AgregarUsuario extends Polymer.Element {
+     static get is() { return 'agregar-usuario'; }
+     static get properties() {
+       return {
+         isvar3:{
+           type: Boolean,
+           value: true
+         },email: {
+           type: String
+         }, password: {
+           type: String
+         },
+         first_name: {
+           type: String
+         },
+         last_name: {
+           type: String
+         },
+         ip_address: {
+           type: String
+         },
+         gender: {
+           type: String
+         },
+         id: {String},
+         isvar9:{
+          type:Boolean,
+          value: true
+         }
+       };
+     }
+     agregar(e) {
+       console.log("El usuario ha pulsado el botón agregar");
+       var agregarData = {
+         "first_name" : this.first_name,
+         "last_name" : this.last_name,
+         "email" : this.email,
+         "ip_address" : this.ip_address,
+         "gender" : this.gender,
+         "password" : this.password
+
+       };
+       this.$.doagregar.body = JSON.stringify(agregarData);
+       this.$.doagregar.generateRequest();
+     }
+     mostrarDatosRecibidosAgregar(data){
+        console.log("Receptor home:"+JSON.stringify(data));
+        console.log("isvar9"+this.isvar9);
+       this.isvar3=data.isvar3;
+       this.isvar9=data.isvar9;
+      }
+     manageAJAXResponse(data) {
+       console.log("Recibida respuesta del servidor para agregar usuario");
+       console.log(data.detail.response);
+
+       this.first_name = data.detail.response.first_name;
+       this.last_name =data.detail.response.last_name;
+       this.id=data.detail.response.id;
+       this.email = data.detail.response.email;
+       this.ip_address = data.detail.response.ip_address;
+       this.gender = data.detail.response.gender;
+       this.password = data.detail.response.password;
+       this.isvar9=false;
+     }
+     showError(error) {
+       console.log("Hubo un error");
+       console.log(error);
+     }
+   }
+   window.customElements.define(AgregarUsuario.is, AgregarUsuario);
+ </script>
+</dom-module>
