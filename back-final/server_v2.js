@@ -11,6 +11,8 @@ var apikeyMLab="apiKey=8UTZVy2FCsLnVPizP9tX4tl3HEHWiQvM";
 var queryString='f={"_id":0}&';
 var newID=0;
 var cors = require('cors');
+var dateformat = require('dateformat');
+var hoy = new Date();
 var ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
 app.use(bodyParser.json());
@@ -150,26 +152,6 @@ app.get(uri + "account",
       });
 });
 
-//Method GET with params MLab movement
-app.get(uri + "movement",
-  function (req, res) {
-    console.log("GET/api_peru/v3/movement");
-    var httpClient = requestJSON.createClient(baseMLabUrl);
-    console.log("cliente http mlab creado")
-    httpClient.get('movement?' + queryString + apikeyMLab,
-      function(error, respuestaMLab, body){
-      console.log('error '+ error);
-      console.log('respuestaMLab '+respuestaMLab);
-        //console.log('body '+body);
-        //var respuesta = body;
-        var respuesta = {};
-        respuesta = !error ? body : {"msg":"error al recuperar movimientos de mlab"};
-        res.send(respuesta);
-      });
-});
-
-
-
 
 //Method GET with params MLab users and accounts with ID
 app.get(uri + "users/:id/account",
@@ -198,15 +180,28 @@ function (req, res) {
   var ida=req.params.ida;
   var queryStringIDA='q={"idCuenta":' + ida + '}&';
   var httpClient = requestJSON.createClient(baseMLabUrl);
-  httpClient.get('movement?' + queryString +  queryStringIDA + apikeyMLab,
-    function(error, respuestaMLab, body){
-      console.log(baseMLabUrl +'movement?'+ queryString+queryStringIDA+apikeyMLab);
-      //var respuesta = body;
-      var respuesta = {};
-      respuesta = !error ? body   : {"msg":"usuario con ese ID no encontrado"};
-      res.send(respuesta);
-    });
-})
+  httpClient.get('account?' + queryString +  queryStringIDA + apikeyMLab,
+  function(error, respuestaMLab, body){
+    console.log(baseMLabUrl +'account?'+ queryString+queryStringIDA+apikeyMLab);
+    var respuesta = body[0];
+    if(respuesta!=undefined){
+        console.log(JSON.stringify(body))
+        var respuesta = {
+          "idCuenta":body[0].idCuenta,
+          "saldo":body[0].saldoDisponible,
+          "movimientos":body[0].movimientos
+        };
+        respuesta = !error ? respuesta : {"msg":"Error recuperando movimientos"};
+        console.log(body[0].saldoDisponible)
+        res.send(respuesta);
+     
+    }else{
+        console.log("Cuenta no existe");
+        res.send({"msg": "Cuenta no existe"});
+    }
+  }); 
+});
+
 //Method GET with params MLab account with ID
 app.get(uri + "account/:id",
   function (req, res) {
@@ -236,14 +231,14 @@ app.get(uri + "movement/:id",
     var id=req.params.id;
     var queryStringID='q={"idCuenta":' + id + '}&';
     var httpClient = requestJSON.createClient(baseMLabUrl);
-    httpClient.get('movement?' + queryString + queryStringID + apikeyMLab,
+    httpClient.get('account?' + queryString + queryStringID + apikeyMLab,
       function(error, respuestaMLab, body){
         console.log('error '+ error);
         console.log('respuestaMLab '+respuestaMLab);
         console.log('body '+body);
         //var respuesta = body;
         var respuesta = {};
-        respuesta = !error ? body[0]   : {"msg":"usuario con ese ID no encontrado"};
+        respuesta = !error ? body[0]   : {"msg":"Cuenta con ese ID no encontrado"};
         res.send(respuesta);
       });
 });
@@ -314,3 +309,99 @@ app.post(uri + "logout",
       }
     });
 });
+
+//Method POST transferencia
+app.post(uri + "transfer",
+  function (req, res){
+    console.log("POST /api_peru/v3/transfer");
+    var montoTransferencia= parseFloat(req.body.montoTransferencia);
+    var cuentaCargo= req.body.cuentaCargo;
+    var cuentaDestino= req.body.cuentaDestino;
+    var queryStringCuentaCargo='q={"nroCuenta":"' + cuentaCargo + '"}&';
+    var queryStringCuentaDestino='q={"nroCuenta":"' + cuentaDestino + '"}&';
+    var  clienteMlab = requestJSON.createClient(baseMLabUrl);
+    //Obtenemos Cuenta Cargo
+    clienteMlab.get('account?'+ queryStringCuentaCargo+apikeyMLab ,
+    function(error, respuestaMLab , bodyCuentaCargo) {
+      console.log("entro al post de transferencias");
+      var respuesta = bodyCuentaCargo[0];
+      console.log("Cuenta Cargo "+bodyCuentaCargo[0].nroCuenta);      
+      if(respuesta!=undefined){
+        //Obtenemos Cuenta Destino        
+        clienteMlab.get('account?'+ queryStringCuentaDestino+apikeyMLab ,
+        function(error, respuestaMLab , bodyCuentaDestino) {         
+          respuesta = bodyCuentaDestino[0];
+          console.log("Cuenta Destino "+bodyCuentaDestino[0].nroCuenta);
+          if(respuesta!=undefined){
+            var saldoCuentoCargo = parseFloat(bodyCuentaCargo[0].saldoDisponible);
+            var idCuentaCargo = bodyCuentaCargo[0].idCuenta;
+            console.log("saldoCuentoCargo "+saldoCuentoCargo);            
+            if(montoTransferencia<saldoCuentoCargo){
+              console.log(baseMLabUrl+'?q={"idCuenta": ' + idCuentaCargo + '}&' + apikeyMLab);
+              var movimientoCuentaCargo=bodyCuentaCargo[0].movimientos;              
+              var cantidadMovCuentacargo = parseInt(movimientoCuentaCargo.length);
+              var newMovimientoCargo = {
+                        "idmov":cantidadMovCuentacargo+1,         
+                        "fecha" : dateformat(hoy,'dd/mm/yyyy'),
+                        "descripcion" : "Nuevo movimiento Cargo",
+                        "monto" : montoTransferencia,
+                        "itf": "0.5",                      
+              };
+              movimientoCuentaCargo.push(newMovimientoCargo);
+              var updateCuentaCargoJson={"movimientos": movimientoCuentaCargo,"saldoDisponible": (saldoCuentoCargo - montoTransferencia)};
+              var updateCuentaCargoSet = '{"$set":' + JSON.stringify(updateCuentaCargoJson) + '}';
+               //Actualizamos Saldo y movimiento Cargo 
+              clienteMlab.put('account?q={"idCuenta": ' + idCuentaCargo+ '}&' + apikeyMLab, JSON.parse(updateCuentaCargoSet),
+               function(errorCargo, respuestaMLabP, bodyCargo) {               
+                if(!errorCargo){
+                  var saldoCuentoDestino = parseFloat(bodyCuentaDestino[0].saldoDisponible);                  
+                  console.log(baseMLabUrl+'?q={"idCuenta": ' + bodyCuentaDestino[0].idCuenta + '}&' + apikeyMLab);
+                  var movimientoCuentaDestino=bodyCuentaDestino[0].movimientos;              
+                  var cantidadMovCuentaDestino = parseInt(movimientoCuentaDestino.length);
+                  var newMovimientoDestino = {
+                            "idmov":cantidadMovCuentaDestino+1,         
+                            "fecha" : dateformat(hoy,'dd/mm/yyyy'),
+                            "descripcion" : "Nuevo movimiento Abono",
+                            "monto" : montoTransferencia,
+                            "itf": "0.5",                      
+                  };
+                  movimientoCuentaDestino.push(newMovimientoDestino);
+                  var updateCuentadestinoJson={"movimientos": movimientoCuentaDestino,"saldoDisponible": (saldoCuentoDestino + montoTransferencia)};
+                  var updateCuentaDestinoSet = '{"$set":' + JSON.stringify(updateCuentadestinoJson) + '}';
+                  //Actualizamos Saldo y movimientos cuenta Destino 
+                  clienteMlab.put('account?q={"idCuenta": ' + bodyCuentaDestino[0].idCuenta + '}&' + apikeyMLab, JSON.parse(updateCuentaDestinoSet),
+                   function(errorDestino, respuestaMLabP, bodyDestino) {               
+                    if(!errorDestino){                      
+                      console.log("Transferencia realizada correctamente");
+                      res.send({"msg": "Transferencia realizada correctamente"});
+    
+                    }else{
+                      console.log("Error al realizar la transferencia");
+                      res.send({"msg": "Error al realizar la transferencia"});
+                    }
+                  });
+                }else{
+                  console.log("Error al realizar el cargo");
+                  res.send({"msg": "Error al realizar el cargo"});
+                }
+              });
+              
+            }else{
+              console.log("Saldo insuficiente");
+              res.send({"msg": "Saldo insuficiente"});
+            }           
+               
+          }else{
+            console.log("No existe la cuenta de destino");
+            res.send({"msg": "No existe la cuenta de destino"});
+          }
+        });
+           
+      }else{
+        console.log("No existe la cuenta de cargo");
+        res.send({"msg": "No existe la cuenta de cargo"});
+      }
+    });
+});
+
+
