@@ -5,6 +5,7 @@
 <link rel="import" href="/src/botones-usuario/botones-usuario.html">
 <link rel="import" href="/src/cuentas-usuario/cuentas-usuario.html">
 <link rel="import" href="/src/movimientos-usuario/movimientos-usuario.html">
+<link rel="import" href="/src/transferencias-usuario/transferencias-usuario.html">
 <link rel="import" href="/src/agregar-usuario/agregar-usuario.html">
 <link rel="import" href="/src/modificar-usuario/modificar-usuario.html">
 <link rel="import" href="/src/eliminar-usuario/eliminar-usuario.html">
@@ -20,6 +21,7 @@
          <botones-usuario id="Receptorusu"></botones-usuario>         
          <cuentas-usuario id="Receptorcuen"></cuentas-usuario>
          <movimientos-usuario id="Receptormov"></movimientos-usuario>
+         <transferencias-usuario id="ReceptorTransfer"></transferencias-usuario>
          <agregar-usuario id="Receptoragregar"></agregar-usuario>
          <modificar-usuario id="Receptormodificar"></modificar-usuario>
          <eliminar-usuario id="Receptoreliminar"></eliminar-usuario>
@@ -45,6 +47,7 @@
        this.$.Receptor.addEventListener('panelcuentas', e => {this.procesarCuentas(e)})
        
        this.$.Receptorcuen.addEventListener('panelmovimientos', e => {this.procesarmovimientos(e)})
+       this.$.Receptorcuen.addEventListener('paneltransferencias', e => {this.procesartransferencias(e)})
        this.$.Receptorusu.addEventListener('panelagregar', e => {this.procesarAgregar(e)})       
        this.$.Receptorusu.addEventListener('panelmodificar', e => {this.procesarModificar(e)})      
        this.$.Receptorusu.addEventListener('paneleliminar', e => {this.procesarEliminar(e)})
@@ -63,6 +66,7 @@
        this.$.Receptorusu.mostrarDatosRecibidosusuarios(e.detail)
        this.$.Receptorcuen.mostrarDatosRecibidoscuentas(e.detail)
        //this.$.Receptormov.mostrarDatosRecibidosmovimientos(e.detail)
+       this.$.ReceptorTransfer.mostrarDatosRecibidosTransferencias(e.detail)
        this.$.Receptoragregar.mostrarDatosRecibidosAgregar(e.detail)
        this.$.Receptormodificar.mostrarDatosRecibidosModificar(e.detail)
        this.$.Receptoreliminar.mostrarDatosRecibidosEliminar(e.detail)
@@ -74,6 +78,7 @@
        this.$.Receptorusu.mostrarDatosRecibidosusuarios(e.detail)
        this.$.Receptorcuen.mostrarDatosRecibidoscuentas(e.detail)
        this.$.Receptormov.mostrarDatosRecibidosmovimientos(e.detail)
+       this.$.ReceptorTransfer.mostrarDatosRecibidosTransferencias(e.detail)
      }
      
      procesarCuentas(e){
@@ -85,12 +90,19 @@
        this.$.Receptormodificar.mostrarDatosRecibidosModificar(e.detail)
        this.$.Receptoreliminar.mostrarDatosRecibidosEliminar(e.detail)
        this.$.Receptorconsultar.mostrarDatosRecibidosconsultas(e.detail)
+       this.$.ReceptorTransfer.mostrarDatosRecibidosTransferencias(e.detail)
      }
      
      procesarmovimientos(e){
        console.log("Padre Soy movimientos:"+ e.detail);
        this.$.Receptormov.mostrarDatosRecibidosmovimientos(e.detail)
      }
+
+     procesartransferencias(e){
+       console.log("Padre Soy transeferncias:"+ e.detail);
+       this.$.ReceptorTransfer.mostrarDatosRecibidosTransferencias(e.detail)
+     }
+     
      
      procesarAgregar(e){
        console.log("Padre Soy agregar:"+ e.detail);

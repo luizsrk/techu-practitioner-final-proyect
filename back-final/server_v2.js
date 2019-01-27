@@ -192,7 +192,6 @@ function (req, res) {
           "movimientos":body[0].movimientos
         };
         respuesta = !error ? respuesta : {"msg":"Error recuperando movimientos"};
-        console.log(body[0].saldoDisponible)
         res.send(respuesta);
      
     }else{
@@ -324,15 +323,15 @@ app.post(uri + "transfer",
     clienteMlab.get('account?'+ queryStringCuentaCargo+apikeyMLab ,
     function(error, respuestaMLab , bodyCuentaCargo) {
       console.log("entro al post de transferencias");
-      var respuesta = bodyCuentaCargo[0];
-      console.log("Cuenta Cargo "+bodyCuentaCargo[0].nroCuenta);      
+      var respuesta = bodyCuentaCargo[0];         
       if(respuesta!=undefined){
+        console.log("Cuenta Cargo "+bodyCuentaCargo[0].nroCuenta);  
         //Obtenemos Cuenta Destino        
         clienteMlab.get('account?'+ queryStringCuentaDestino+apikeyMLab ,
         function(error, respuestaMLab , bodyCuentaDestino) {         
-          respuesta = bodyCuentaDestino[0];
-          console.log("Cuenta Destino "+bodyCuentaDestino[0].nroCuenta);
+          respuesta = bodyCuentaDestino[0];          
           if(respuesta!=undefined){
+            console.log("Cuenta Destino "+bodyCuentaDestino[0].nroCuenta);
             var saldoCuentoCargo = parseFloat(bodyCuentaCargo[0].saldoDisponible);
             var idCuentaCargo = bodyCuentaCargo[0].idCuenta;
             console.log("saldoCuentoCargo "+saldoCuentoCargo);            
@@ -343,9 +342,10 @@ app.post(uri + "transfer",
               var newMovimientoCargo = {
                         "idmov":cantidadMovCuentacargo+1,         
                         "fecha" : dateformat(hoy,'dd/mm/yyyy'),
-                        "descripcion" : "Nuevo movimiento Cargo",
+                        "descripcion" : "Nuevo movimiento Cargo",                        
                         "monto" : montoTransferencia,
-                        "itf": "0.5",                      
+                        "itf": 0.5,
+                        "tipomov" : 0                      
               };
               movimientoCuentaCargo.push(newMovimientoCargo);
               var updateCuentaCargoJson={"movimientos": movimientoCuentaCargo,"saldoDisponible": (saldoCuentoCargo - montoTransferencia)};
@@ -361,9 +361,10 @@ app.post(uri + "transfer",
                   var newMovimientoDestino = {
                             "idmov":cantidadMovCuentaDestino+1,         
                             "fecha" : dateformat(hoy,'dd/mm/yyyy'),
-                            "descripcion" : "Nuevo movimiento Abono",
+                            "descripcion" : "Nuevo movimiento Abono",                            
                             "monto" : montoTransferencia,
-                            "itf": "0.5",                      
+                            "itf": "0.5",
+                            "tipomov" : 1                      
                   };
                   movimientoCuentaDestino.push(newMovimientoDestino);
                   var updateCuentadestinoJson={"movimientos": movimientoCuentaDestino,"saldoDisponible": (saldoCuentoDestino + montoTransferencia)};
@@ -373,33 +374,33 @@ app.post(uri + "transfer",
                    function(errorDestino, respuestaMLabP, bodyDestino) {               
                     if(!errorDestino){                      
                       console.log("Transferencia realizada correctamente");
-                      res.send({"msg": "Transferencia realizada correctamente"});
+                      res.send({"estadoTransferencia":"ok","msg": "Transferencia realizada correctamente","saldoDisponibleCuentaCargo":saldoCuentoCargo - montoTransferencia});
     
                     }else{
                       console.log("Error al realizar la transferencia");
-                      res.send({"msg": "Error al realizar la transferencia"});
+                      res.send({"estadoTransferencia":"error","msg": "Error al realizar la transferencia"});
                     }
                   });
                 }else{
                   console.log("Error al realizar el cargo");
-                  res.send({"msg": "Error al realizar el cargo"});
+                  res.send({"estadoTransferencia":"error","msg": "Error al realizar el cargo"});
                 }
               });
               
             }else{
               console.log("Saldo insuficiente");
-              res.send({"msg": "Saldo insuficiente"});
+              res.send({"estadoTransferencia":"error","msg": "Saldo insuficiente"});
             }           
                
           }else{
             console.log("No existe la cuenta de destino");
-            res.send({"msg": "No existe la cuenta de destino"});
+            res.send({"estadoTransferencia":"error","msg": "No existe la cuenta de destino"});
           }
         });
            
       }else{
         console.log("No existe la cuenta de cargo");
-        res.send({"msg": "No existe la cuenta de cargo"});
+        res.send({"estadoTransferencia":"error","msg": "No existe la cuenta de cargo"});
       }
     });
 });

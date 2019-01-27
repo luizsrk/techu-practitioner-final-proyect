@@ -38,21 +38,26 @@
          <h4 class="col-md-5">Usuario: {{first_name}} {{last_name}}</h2>
          <h4 class="col-md-5">Email: {{email}}</h2>
         <!-- <button class="btn btn-link">
-           <a href="http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com/api_peru/v3/users/{{id}}/account">Ver mis cuentas</a>
+           <a href="http://localhost:8080/api_peru/v3/users/{{id}}/account">Ver mis cuentas</a>
          </button>-->
         <table class="table table-bordered">
         <thead class="thead-dark">
           <tr>
             <th scope="col">Nro Cuenta</th>
-            <th scope="col">Saldo </th>
+            <th scope="col">Saldo Disponible </th>
+            <th scope="col">Saldo Contable </th>
             <th scope="col"></th>
           </tr>
         </thead>
         <template is="dom-repeat" id="accountUser" items="{{account}}">
             <tr>
                 <th scope="row">{{item.nroCuenta}}</th>
+                <td>{{item.saldoDisponible}}</td>
                 <td>{{item.saldoContable}}</td>
-                <td><button  class="btn btn-primary" on-click="panelmovimientos">Ver Movimientos</button></td>
+                <td>
+                  <button  class="btn btn-primary" on-click="panelmovimientos">Ver Movimientos</button>
+                  <button  class="btn btn-primary" on-click="paneltransferencias">Realizar Transferencia</button>
+                </td>
           </tr>
         </template>
        </table>
@@ -60,13 +65,13 @@
    <iron-ajax
      auto=""
      id="getUser"
-     url="http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com/api_peru/v3/users/{{idr}}"
+     url="http://localhost:8080/api_peru/v3/users/{{idr}}"
      handle-as="json"
      on-response="showData"></iron-ajax>
     <iron-ajax
        auto=""
        id="getUser1"
-       url="http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com/api_peru/v3/users/{{idr}}/account"
+       url="http://localhost:8080/api_peru/v3/users/{{idr}}/account"
        handle-as="json"
        on-response="showaccount"></iron-ajax>
  </template>
@@ -102,16 +107,23 @@
          isvar2:{
            type:Boolean,
            value:true
-         },isvar5:{
+         },
+         isvar5:{
            type:Boolean
+         },
+         isvar9:{
+           type:Boolean
+         },
+         nroCuentaCargo:{
+           type:String
+         },
+         saldoDisponible:{
+           type:String
          }
        };
      }
      showData(data){
-        //console.log(data);
-        console.log("Recibidos datos del usuarios cuentas:");
-  // mLab nos devuelve un array con el objeto solicitado por eso [0]
-      //  console.log(data.detail.response.id);
+      console.log("Recibidos datos del usuarios cuentas:");
       console.log(data.detail.response);
 
         this.idr = data.detail.response.userID;
@@ -123,19 +135,38 @@
          //console.log(data);
          console.log("Recibidos datos del usuarios en cuentas:");
    // mLab nos devuelve un array con el objeto solicitado por eso [0]
-         console.log(data.detail.response);
-         this.idcue = data.detail.response.idCuenta;
-         this.account = data.detail.response;
+         console.log(data.detail.response);       
+         this.account = data.detail.response;        
+         console.log("account "+this.account);
+
        }
        panelmovimientos(e){
-         console.log("pulsa boton movimientos: ");
+         console.log("pulsa boton movimientos: ");       
+         this.idcue = e.model.__data.item.idCuenta;        
+         console.log("idcue "+this.idcue);
          this.isvar5=false;
          this.isvar2=true;
          this.dispatchEvent(new CustomEvent('panelmovimientos', {detail:{email:this.email,idr:this.idr,idcue:this.idcue,isvar5:this.isvar5}}))
          console.log(this.email);
+         console.log(this.idcue);        
+         console.log(this.isvar5);
+       }
+
+      paneltransferencias(e){
+         console.log("pulsa boton transferencias: ");       
+         this.idcue = e.model.__data.item.idCuenta;
+         this.nroCuentaCargo =e.model.__data.item.nroCuenta;
+         this.saldoDisponible =e.model.__data.item.saldoDisponible;
+         console.log("idcue "+this.idcue);
+         this.isvar5=false;
+         this.isvar2=true;
+         this.isvar9=true;
+         this.dispatchEvent(new CustomEvent('paneltransferencias', {detail:{isvar9:this.isvar9,idr:this.idr,idcue:this.idcue,isvar5:this.isvar5,nroCuentaCargo:this.nroCuentaCargo,saldoDisponible:this.saldoDisponible}}))
+         console.log(this.email);
          console.log(this.idcue);
          console.log(this.isvar5);
-
+         console.log("Nro Cuenta cargo " +this.nroCuentaCargo);
+         console.log("Saldo Disponible " +this.saldoDisponible);
        }
        mostrarDatosRecibidoscuentas(data){
          console.log("Receptor Cuentas:"+JSON.stringify(data))

@@ -1,0 +1,155 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="transferencias-usuario">
+ <template>
+   <style>
+     :host {
+       display: block;
+       font-family: Helvetica;
+     }
+     .container{
+       width: 100%;
+       max-width: 600px;
+       margin: 0 auto;
+       padding: 100px 0;
+       padding-top: 10px;
+     }
+     .container h4{
+       font-family: Helvetica;
+       color: white;
+     }
+     .container .table .thead-dark th{
+       background:  #0672ca !important
+     }
+     .container .table-bordered th{
+       background: white
+     }
+     .container .table-bordered td{
+       background: white
+     }
+   </style>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+     <!-- Bootstrap permite indicar el ancho por nº columnas (col-md-5 indica 5 columnas)
+     total columnas 12 (que indica el ancho máximo)-->
+     <!-- media query -->
+
+     <div hidden$="{{isvar5}}" class="container">
+         <h4 class="col-md-10">Realizar Transferencia</h4>
+         <h4 class="col-md-10">Cuenta de Cargo: {{cuentaCargo}}</h4>
+         <h4 class="col-md-5">Saldo Disponible: {{saldoDisponible}}</h4>
+
+          <input type="cuentaDestino" class="form-control" id="cuentaDestino"  placeholder="Ingrese la cuenta Destino" value="{{cuentaDestino::input}}"></br>
+          <input type="montoTransferencia" class="form-control" id="montoTransferencia"  placeholder="Ingrese monto a Transferir" value="{{montoTransferencia::input}}"></br>
+          <input type="referenciaTransferencia" class="form-control" id="referenciaTransferencia"  placeholder="Referencia de operacion" value="{{referenciaTransferencia::input}}"></br>
+          <button  class="btn btn-primary" on-click="transferir">Transferir</button><br></br>
+          <div hidden$="{{isvar9}}"class$="{{labelStatusTransferencia}}">
+           <strong>{{msgTranferencia}}!</strong>
+          </div>
+   </div>
+
+   <iron-ajax
+   id="dotransferir"
+   url="http://localhost:8080/api_peru/v3/transfer"
+   content-type="application/json"
+   method="POST"
+   handle-as="json"
+   on-response="manageAJAXResponse"
+   on-error="showError">
+
+ </template>
+
+
+ <script>
+   /**
+    * @customElement
+    * @polymer
+    */
+   class TransferenciasUsuario extends Polymer.Element {
+     static get is() { return 'transferencias-usuario'; }
+     static get properties() {
+       return {
+         isvar5:{
+           type:Boolean,
+           value:true
+         },
+         cuentaCargo: {
+           type: String
+         },         
+         saldoDisponible: {
+           type: String
+         },
+         cuentaDestino: {
+           type: String
+         },
+         montoTransferencia: {
+           type: String
+         },
+         referenciaTransferencia: {
+           type: String
+         },
+         idr:{
+           type:String,
+         },
+         idcue:{
+           type:String,
+         },
+         msgTranferencia:{
+           type:String,
+         },
+         isvar9:{
+          type:Boolean,
+          value: true
+         },
+         labelStatusTransferencia:{
+          type:String,
+         }
+       };
+     }
+
+      transferir(e) {
+       console.log("El usuario ha pulsado el botón Transferir");
+       var agregarData = {
+         "cuentaCargo" : this.cuentaCargo,
+         "cuentaDestino" : this.cuentaDestino,
+         "montoTransferencia" : this.montoTransferencia
+       };
+       this.$.dotransferir.body = JSON.stringify(agregarData);
+       this.$.dotransferir.generateRequest();
+     }
+
+      manageAJAXResponse(data) {
+       console.log("Recibida respuesta del servidor para realizar la transferencia");
+       console.log(data.detail.response);
+       this.msgTranferencia = data.detail.response.msg;      
+       if(data.detail.response.estadoTransferencia == "ok"){
+         this.labelStatusTransferencia  = "alert alert-success"
+         this.saldoDisponible = data.detail.response.saldoDisponibleCuentaCargo;
+       }else{
+        this.labelStatusTransferencia  = "alert alert-danger"
+       }
+       
+       this.isvar9=false;
+     }
+     showError(error) {
+       console.log("Hubo un error");
+       console.log(error);
+     }
+     
+
+       mostrarDatosRecibidosTransferencias(data){
+        this.idcue=data.idcue;
+        this.isvar5=data.isvar5;
+        this.isvar9=data.isvar9;
+        this.idr=data.idr;
+        this.cuentaCargo = data.nroCuentaCargo;
+        this.saldoDisponible = data.saldoDisponible;
+        console.log("Receptor transferencias "+ this.idcue);        
+        console.log("Receptor transferencias Cuenta Cargo "+ this.cuentaCargo);
+        console.log("Receptor transferencias Saldo Disponible "+ this.saldoDisponible);
+        
+       }
+   }
+   window.customElements.define(TransferenciasUsuario.is, TransferenciasUsuario);
+ </script>
+</dom-module>
