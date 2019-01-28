@@ -23,7 +23,7 @@ describe('pruebas peru', () => {
        })
   })
   it('mi api funciona con get', (done) => {
-       chai.request('http://localhost:3000')
+       chai.request('http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000')
         .get('/api_peru/v3/users')
         .end((err,res) => {
               //console.log("RESPUESTA:"+res)
@@ -37,7 +37,7 @@ describe('pruebas peru', () => {
       })
   })
   it('mi api funciona con post', (done) => {
-       chai.request('http://localhost:3000')
+       chai.request('http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000')
         .post('/api_peru/v3/users')
         .send('{"id" : 1 , "first_name": "Too0tsie", "last_name": "Nethercott",   "email": "prueba01@hotmail.com", "password": "prueba01"}')
         .end((err,res, body) => {

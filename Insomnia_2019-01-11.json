@@ -143,7 +143,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/bdapi_peru/v1/user/",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/bdapi_peru/v1/user/",
 			"_type": "request"
 		},
 		{
@@ -198,7 +198,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:8081/bdapi_peru/v1/user/",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:8081/bdapi_peru/v1/user/",
 			"_type": "request"
 		},
 		{
@@ -230,7 +230,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:8081/bdapi_peru/v1/user/206",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:8081/bdapi_peru/v1/user/206",
 			"_type": "request"
 		},
 		{
@@ -253,7 +253,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/bdapi_peru/v1/user/206",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/bdapi_peru/v1/user/206",
 			"_type": "request"
 		},
 		{
@@ -287,7 +287,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/bdapi_peru/v1/login",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/bdapi_peru/v1/login",
 			"_type": "request"
 		},
 		{
@@ -319,7 +319,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/logout",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/logout",
 			"_type": "request"
 		},
 		{
@@ -342,7 +342,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/users",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/users",
 			"_type": "request"
 		},
 		{
@@ -374,7 +374,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/login",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/login",
 			"_type": "request"
 		},
 		{
@@ -406,7 +406,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/logout",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/logout",
 			"_type": "request"
 		},
 		{
@@ -438,7 +438,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/users/500",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/users/500",
 			"_type": "request"
 		},
 		{
@@ -470,7 +470,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/users/2",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/users/2",
 			"_type": "request"
 		},
 		{
@@ -502,7 +502,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/users",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/users",
 			"_type": "request"
 		},
 		{
@@ -525,7 +525,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/users/97",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/users/97",
 			"_type": "request"
 		},
 		{
@@ -548,7 +548,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/account",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/account",
 			"_type": "request"
 		},
 		{
@@ -571,7 +571,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/movement",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/movement",
 			"_type": "request"
 		},
 		{
@@ -594,7 +594,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/account/4622-9240-146577405",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/account/4622-9240-146577405",
 			"_type": "request"
 		},
 		{
@@ -617,7 +617,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/movement/1",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/movement/1",
 			"_type": "request"
 		},
 		{
@@ -640,7 +640,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/users/7/account",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/users/7/account",
 			"_type": "request"
 		},
 		{
@@ -663,7 +663,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://localhost:3000/api_peru/v3/users/account/1/movement",
+			"url": "http://nodetest-nodetest.7e14.starter-us-west-2.openshiftapps.com:3000/api_peru/v3/users/account/1/movement",
 			"_type": "request"
 		}
 	]
